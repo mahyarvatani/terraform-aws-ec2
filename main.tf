@@ -3,6 +3,7 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
   key_name      = "mhv"
   tags = {
-    Name = "created by mahyar-terraform"
+    Name = "web"
+    Created_by = "terraform"
   }
 }
