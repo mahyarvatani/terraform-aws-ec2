@@ -82,8 +82,18 @@ data "aws_ami" "my-server-image" {
   most_recent = true
 
   filter {
-    name   = "name"
-    values = ["amazon-*"]
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "description"
+    values = ["Amazon Linux 2*"]
+  }
+
+  filter {
+    name   = "description"
+    values = ["Amazon Linux 2 Kernel*x86_64 HVM gp2"]
   }
 
   filter {
@@ -92,25 +102,29 @@ data "aws_ami" "my-server-image" {
   }
 }
 
-output "my-server-image-id" {
-  name = "my-server-image-id"
-  value       = data.my-server-image.id
+output "my_server_image_id" {
+  value       = data.aws_ami.my-server-image.id
+}
+
+resource "aws_key_pair" "ssh-key" {
+  key_name = "my-key"
+  public_key = file(var.public-key)
 }
 
 resource "aws_instance" "my-server" {
-  ami           = data.my-server-image.id
+  ami           = data.aws_ami.my-server-image.id
   instance_type = "t2.micro"
   availability_zone = var.subnet-availability-zone
-  key_name = file(var.public-key)
-  security_groups = [aws_security_group.my-server-sg.id]
-  associate_pulic_ip_address = true
+  key_name = aws_key_pair.ssh-key.key_name
+  vpc_security_group_ids = [aws_security_group.my-server-sg.id]
+  subnet_id = aws_subnet.my-first-subnet.id
+  associate_public_ip_address = true
 
   tags = {
-    Name = "m-server"
+    Name: "my-server"
   }
 }
 
 output "my-server-public-ip" {
-  name = "my-server-public-ip"
   value = ["${aws_instance.my-server.public_ip}"]
 }
