@@ -4,6 +4,7 @@ variable "subnet-cidr-block" {}
 variable "subnet-availability-zone" {}
 variable "ssh-users-ip" {}
 variable "http-users-ip" {}
+variable "public-key" {}
 
 resource "aws_vpc" "my-vpc" {
   cidr_block = var.vpc-cider-block
@@ -47,8 +48,8 @@ resource "aws_route_table_association" "rtb-to-subnet" {
   
 }
 
-resource "aws_security_group" "my-sg" {
-  name        = "my-sg"
+resource "aws_security_group" "my-server-sg" {
+  name        = "my-server-sg"
   vpc_id = aws_vpc.my-vpc.id
 
   ingress {
@@ -73,7 +74,43 @@ resource "aws_security_group" "my-sg" {
   }
 
   tags = {
-    Name = "my-sg"
+    Name = "my-server-sg"
   }
 }
 
+data "aws_ami" "my-server-image" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["amazon-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+output "my-server-image-id" {
+  name = "my-server-image-id"
+  value       = data.my-server-image.id
+}
+
+resource "aws_instance" "my-server" {
+  ami           = data.my-server-image.id
+  instance_type = "t2.micro"
+  availability_zone = var.subnet-availability-zone
+  key_name = file(var.public-key)
+  security_groups = [aws_security_group.my-server-sg.id]
+  associate_pulic_ip_address = true
+
+  tags = {
+    Name = "m-server"
+  }
+}
+
+output "my-server-public-ip" {
+  name = "my-server-public-ip"
+  value = ["${aws_instance.my-server.public_ip}"]
+}
