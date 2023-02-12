@@ -2,6 +2,8 @@ variable "env-name" {}
 variable "vpc-cider-block" {}
 variable "subnet-cidr-block" {}
 variable "subnet-availability-zone" {}
+variable "ssh-users-ip" {}
+variable "http-users-ip" {}
 
 resource "aws_vpc" "my-vpc" {
   cidr_block = var.vpc-cider-block
@@ -45,5 +47,33 @@ resource "aws_route_table_association" "rtb-to-subnet" {
   
 }
 
+resource "aws_security_group" "my-sg" {
+  name        = "my-sg"
+  vpc_id = aws_vpc.my-vpc.id
 
+  ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = [var.ssh-users-ip]
+  }
+
+  ingress {
+    from_port        = 8080
+    to_port          = 8080
+    protocol         = "tcp"
+    cidr_blocks      = [var.http-users-ip]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "my-sg"
+  }
+}
 
