@@ -50,14 +50,16 @@ terraform destroy
 Confirm the destruction when prompted.
 
 ## Terraform Modules
-This project uses Terraform modules to organize and reuse code. Each module is responsible for a specific component of the infrastructure.
 
-vpc: Creates a customized VPC.
-subnet: Creates a customized subnet within the VPC.
-route-table: Creates a route table associated with the VPC.
-internet-gateway: Creates an internet gateway and associates it with the VPC.
-ec2-instance: Creates an EC2 instance with a deployed Nginx Docker container.
-security-group: Creates a security group allowing SSH and port 8080 access.
+- **VPC**: Creates a customized Virtual Private Cloud (VPC).
+- **Subnet**: Creates a customized subnet within the VPC.
+- **Route Table**: Creates a route table associated with the VPC.
+- **Internet Gateway**: Creates an internet gateway and associates it with the VPC.
+- **EC2 Instance**: Creates an EC2 instance with a deployed Nginx Docker container.
+- **Security Group**: Creates a security group allowing SSH and port 8080 access.
+
+The infrastructure is designed for a simple web application with restricted access.
+
 
 Contributing
 If you'd like to contribute to this project, please follow the guidelines in CONTRIBUTING.md.
