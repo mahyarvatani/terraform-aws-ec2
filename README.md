@@ -37,18 +37,19 @@ To create the infrastructure, run the following Terraform commands:
 ```bash
 terraform plan          # Review the changes that will be applied
 terraform apply         # Apply the changes to create the infrastructure
+```
 
 After successfully applying the changes, Terraform will output information about the created resources, including the public IP address of the EC2 instance.
 
 Cleaning Up
 To destroy the created infrastructure, run:
 
-bash
-Copy code
+```bash
 terraform destroy
+```
 Confirm the destruction when prompted.
 
-Terraform Modules
+## Terraform Modules
 This project uses Terraform modules to organize and reuse code. Each module is responsible for a specific component of the infrastructure.
 
 vpc: Creates a customized VPC.
@@ -62,13 +63,7 @@ Feel free to explore the individual modules for more details.
 Contributing
 If you'd like to contribute to this project, please follow the guidelines in CONTRIBUTING.md.
 
-License
-This project is licensed under the MIT License.
 
-vbnet
-Copy code
-
-Remember to replace placeholder values like `your-username` and adjust any other details based on your project structure and preferences.
 
 
 
