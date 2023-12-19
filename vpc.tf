@@ -1,28 +1,28 @@
-resource "aws_vpc" "my-vpc" {
+resource "aws_vpc" "vpc1" {
   cidr_block = var.vpc-cider-block
 
   tags = {
     Name: "${var.env-name}-vpc"
   }
 }
-resource "aws_internet_gateway" "my-vpc-igw" {
+resource "aws_internet_gateway" "igw1" {
 
-  vpc_id = aws_vpc.my-vpc.id
+  vpc_id = aws_vpc.vpc1.id
   tags ={
     Name: "${var.env-name}-igw"
   }
   
 }
-resource "aws_route_table" "my-vpc-rtb" {
-  vpc_id = aws_vpc.my-vpc.id
+resource "aws_route_table" "rtb1" {
+  vpc_id = aws_vpc.vpc1.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.my-vpc-igw.id
+    gateway_id = aws_internet_gateway.igw1.id
   }
 }
-resource "aws_security_group" "my-server-sg" {
-  name        = "my-server-sg"
-  vpc_id = aws_vpc.my-vpc.id
+resource "aws_security_group" "public_sg" {
+  name        = "public_sg"
+  vpc_id = aws_vpc.vpc1.id
 
   ingress {
     from_port        = 22
@@ -46,6 +46,6 @@ resource "aws_security_group" "my-server-sg" {
   }
 
   tags = {
-    Name = "my-server-sg"
+    Name = "public_sg"
   }
 }
