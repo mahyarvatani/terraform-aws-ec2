@@ -2,7 +2,10 @@ variable "subnet-cidr-block" {
     description = "cidr related to the vpc1"
     default = "10.0.0.0/16"
 }
-variable "subnet-availability-zone" {}
+variable "subnet-availability-zone" {
+  vpc_id = aws_vpc.vpc1.id
+  cidr_block = "10.0.1.0/24"
+}
 variable "ssh-users-ip" {
     default = ["0.0.0.0/0"]
 }
