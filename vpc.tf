@@ -1,5 +1,5 @@
 resource "aws_vpc" "vpc1" {
-  cidr_block = var.vpc-cider-block
+  cidr_block = var.vpc-cidr-block
 
   tags = {
     Name: "${var.env-name}-vpc"
@@ -13,7 +13,7 @@ resource "aws_internet_gateway" "igw1" {
   }
   
 }
-resource "aws_route_table" "rtb1" {
+resource "aws_route_table" "vpc1_rtb" {
   vpc_id = aws_vpc.vpc1.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -28,14 +28,14 @@ resource "aws_security_group" "public_sg" {
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = [var.ssh-users-ip]
+    cidr_blocks      = var.ssh-users-ip
   }
 
   ingress {
     from_port        = 8080
     to_port          = 8080
     protocol         = "tcp"
-    cidr_blocks      = [var.http-users-ip]
+    cidr_blocks      = var.http-users-ip
   }
 
   egress {

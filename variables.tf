@@ -22,8 +22,8 @@ variable "env-name" {
     description = "environment name"
     default = "dev"
 }
-variable "vpc-cider-block" {
+variable "vpc-cidr-block" {
     description = "vpc sider"
-    default = [ "10.0.0.0/24" ]
+    default = "10.0.0.0/24" 
 }
 
